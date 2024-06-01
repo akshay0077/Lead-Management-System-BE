@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import morgan from 'morgan';
 import connectDB from './src/config/db.js';
 import authRoutes from './src/routes/authRoutes.js'
+import leadRoutes from './src/routes/leadRoutes.js'
 import cors from 'cors'
 
 //configuration 
@@ -20,6 +21,7 @@ app.use(cors())
 
 //All Routes is Listed Here
 app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/lead', leadRoutes);
 
 //build a rest api here 
 app.get('/', (req, res) => {
