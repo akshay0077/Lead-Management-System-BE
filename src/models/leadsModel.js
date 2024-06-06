@@ -39,7 +39,7 @@ const leadsSchema = new mongoose.Schema({
     segregation: {
         type: String,
         required: true,
-        enum: ["REPAIRS", "TRADERS"]
+        trim: true
     },
     datecreated: {
         type: Date,
@@ -51,7 +51,7 @@ const leadsSchema = new mongoose.Schema({
 });
 
 // Middleware to update the dateUpdated field before save
-leadsSchema.pre('save', function(next) {
+leadsSchema.pre('save', function (next) {
     this.dateUpdated = new Date();
     next();
 });

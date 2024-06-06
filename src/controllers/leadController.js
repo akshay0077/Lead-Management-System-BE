@@ -55,6 +55,28 @@ export const leadsCreate = async (req, res) => {
     }
 };
 
+// singleLeadGet: Fetch a single Lead by ID
+export const singleLeadGet = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        // Find user by ID
+        const leadData = await leads.findOne({ _id: id });
+
+        if (!leadData) {
+            res.status(404).json({ message: "Lead not found" });
+        }
+
+        res.status(200).json(leadData);
+    } catch (error) {
+        res.status(500).send({
+            success: false,
+            error: error.message,
+            message: "Error in while Searching Leads",
+        });
+    }
+};
+
 // getAllLeads: Fetch a All Leads 
 export const getAllLeads = async (req, res) => {
     const page = req.query.page || 1;
@@ -160,24 +182,24 @@ export const leadExport = async (req, res) => {
 
         const csvStream = csv.format({ headers: true });
 
-        if (!fs.existsSync("public/files/export/")) {
-            if (!fs.existsSync("public/files")) {
-                fs.mkdirSync("public/files/");
+        if (!fs.existsSync("./public/files/export/")) {
+            if (!fs.existsSync("./public/files")) {
+                fs.mkdirSync("./public/files/");
             }
-            if (!fs.existsSync("public/files/export")) {
+            if (!fs.existsSync("./public/files/export")) {
                 fs.mkdirSync("./public/files/export/");
             }
         }
 
         const writablestream = fs.createWriteStream(
-            "public/files/export/leads.csv"
+            "./public/files/export/leads.csv"
         );
 
         csvStream.pipe(writablestream);
 
         writablestream.on("finish", function () {
             res.json({
-                downloadUrl: `${BASE_URL}/files/export/leads.csv`,
+                downloadUrl: `${BASE_URL}/public/files/export/leads.csv`,
             });
         });
         if (leadsdata.length > 0) {
