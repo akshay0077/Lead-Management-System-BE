@@ -56,26 +56,68 @@ export const leadsCreate = async (req, res) => {
   }
 };
 
+// Get User: fetch user based on his name
+export const userSearch = async (req, res) => {
+  const search = req.query.search || "";
+  const page = req.query.page || 1;
+  const ITEM_PER_PAGE = 4; // Number of items per page
+
+  const query = {
+    customer_name: { $regex: search, $options: "i" },
+  };
+
+  try {
+    // Calculate the number of documents matching the query
+    const count = await leads.countDocuments(query);
+
+    // Calculate the number of documents to skip for pagination. Ex: 1 * 4 = 4
+    const skip = (page - 1) * ITEM_PER_PAGE;
+
+    const leadsData = await leads
+      .find(query)
+      .limit(ITEM_PER_PAGE)
+      .skip(skip);
+
+    // Calculate the total number of pages for pagination. Ex:  8 /4 = 2
+    const pageCount = Math.ceil(count / ITEM_PER_PAGE);
+
+    // Send the response with pagination information and user data
+    res.status(200).json({
+      Pagination: {
+        count,
+        pageCount,
+      },
+      leadsData,
+    });
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      error: error.message,
+      message: "Error in while Searching Leads Data",
+    });
+  }
+};
+
 // singleLeadGet: Fetch a single Lead by ID
 export const singleLeadGet = async (req, res) => {
-    const { id } = req.params;
+  const { id } = req.params;
 
-    try {
-        // Find user by ID
-        const leadData = await leads.findOne({ _id: id });
+  try {
+    // Find user by ID
+    const leadData = await leads.findOne({ _id: id });
 
-        if (!leadData) {
-            res.status(404).json({ message: "Lead not found" });
-        }
-
-        res.status(200).json(leadData);
-    } catch (error) {
-        res.status(500).send({
-            success: false,
-            error: error.message,
-            message: "Error in while Searching Leads",
-        });
+    if (!leadData) {
+      res.status(404).json({ message: "Lead not found" });
     }
+
+    res.status(200).json(leadData);
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      error: error.message,
+      message: "Error in while Searching Leads",
+    });
+  }
 };
 
 // getAllLeads: Fetch a All Leads 

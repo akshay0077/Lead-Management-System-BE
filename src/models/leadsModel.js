@@ -50,10 +50,6 @@ const leadsSchema = new mongoose.Schema({
     }
 });
 
-// Middleware to update the dateUpdated field before save
-leadsSchema.pre('save', function (next) {
-    this.dateUpdated = new Date();
-    next();
-  
+
 // Model
 export default mongoose.model("leads", leadsSchema);

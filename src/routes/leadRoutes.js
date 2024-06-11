@@ -1,4 +1,3 @@
-import { uploadMiddleware } from '../middlewares/uploadMiddleware.js';
 import express from "express";
 import { isAdmin, requireSignIn } from "../middlewares/authMiddleware.js";
 import {
@@ -6,6 +5,7 @@ import {
   getAllLeads,
   leadExport,
   leadImport,
+  userSearch,
   leadsCreate,
   updateLeads,
 } from "../controllers/leadController.js";
@@ -18,6 +18,7 @@ const upload = multer({ dest: "./public/files/import" });
 
 //Login Router and Method is POST
 router.post("/create-lead", leadsCreate);
+router.get("/user/details", userSearch);
 router.get("/all-leads", getAllLeads);
 router.put("/update-lead/:id", updateLeads);
 router.delete("/delete-lead/:id", deleteLeads);
