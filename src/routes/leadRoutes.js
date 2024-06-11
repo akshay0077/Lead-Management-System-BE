@@ -1,3 +1,4 @@
+import { uploadMiddleware } from '../middlewares/uploadMiddleware.js';
 import express from "express";
 import { isAdmin, requireSignIn } from "../middlewares/authMiddleware.js";
 import {
@@ -9,6 +10,7 @@ import {
   updateLeads,
 } from "../controllers/leadController.js";
 import multer from "multer";
+
 //create a seprate router object
 const router = express.Router();
 

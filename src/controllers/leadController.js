@@ -56,7 +56,29 @@ export const leadsCreate = async (req, res) => {
   }
 };
 
-// getAllLeads: Fetch a All Leads
+// singleLeadGet: Fetch a single Lead by ID
+export const singleLeadGet = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        // Find user by ID
+        const leadData = await leads.findOne({ _id: id });
+
+        if (!leadData) {
+            res.status(404).json({ message: "Lead not found" });
+        }
+
+        res.status(200).json(leadData);
+    } catch (error) {
+        res.status(500).send({
+            success: false,
+            error: error.message,
+            message: "Error in while Searching Leads",
+        });
+    }
+};
+
+// getAllLeads: Fetch a All Leads 
 export const getAllLeads = async (req, res) => {
   const page = req.query.page || 1;
   const ITEM_PER_PAGE = 20; // Number of items per page
