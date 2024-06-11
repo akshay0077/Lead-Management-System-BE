@@ -54,7 +54,6 @@ const leadsSchema = new mongoose.Schema({
 leadsSchema.pre('save', function (next) {
     this.dateUpdated = new Date();
     next();
-});
-
+  
 // Model
 export default mongoose.model("leads", leadsSchema);
